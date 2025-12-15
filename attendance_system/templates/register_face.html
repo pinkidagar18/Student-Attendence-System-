@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h2>Register Face: {{ student.first_name }} {{ student.last_name }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="text-center">
+                    <video id="video" width="640" height="480" autoplay></video>
+                    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    <button id="captureBtn" class="btn btn-primary mx-2">Capture</button>
+                    <button id="retakeBtn" class="btn btn-secondary mx-2" style="display: none;">Retake</button>
+                    <button id="saveBtn" class="btn btn-success mx-2" style="display: none;">Save</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h4>Instructions</h4>
+                    </div>
+                    <div class="card-body">
+                        <ol>
+                            <li>Position your face in the center of the camera</li>
+                            <li>Ensure good lighting on your face</li>
+                            <li>Remove glasses or hats if possible</li>
+                            <li>Keep a neutral expression</li>
+                            <li>Click "Capture" when ready</li>
+                            <li>Verify the image quality</li>
+                            <li>Click "Save" or "Retake" as needed</li>
+                        </ol>
+                    </div>
+                </div>
+                <div id="status" class="alert mt-3" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('captureBtn');
+        const retakeBtn = document.getElementById('retakeBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const statusDiv = document.getElementById('status');
+        const context = canvas.getContext('2d');
+        let stream;
+        
+        // Start video stream
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(s) {
+                stream = s;
+                video.srcObject = stream;
+            })
+            .catch(function(err) {
+                console.error("Error accessing the camera:", err);
+                statusDiv.textContent = "Error accessing the camera. Please make sure camera permissions are granted.";
+                statusDiv.className = "alert alert-danger mt-3";
+                statusDiv.style.display = "block";
+            });
+        
+        // Capture button click
+        captureBtn.addEventListener('click', function() {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            video.style.display = 'none';
+            canvas.style.display = 'block';
+            captureBtn.style.display = 'none';
+            retakeBtn.style.display = 'inline-block';
+            saveBtn.style.display = 'inline-block';
+        });
+        
+        // Retake button click
+        retakeBtn.addEventListener('click', function() {
+            video.style.display = 'block';
+            canvas.style.display = 'none';
+            captureBtn.style.display = 'inline-block';
+            retakeBtn.style.display = 'none';
+            saveBtn.style.display = 'none';
+        });
+        
+        // Save button click
+        saveBtn.addEventListener('click', function() {
+            const imageData = canvas.toDataURL('image/jpeg');
+            
+            fetch('/register_face/{{ student.id }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'image_data': imageData
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    statusDiv.textContent = "Face registered successfully!";
+                    statusDiv.className = "alert alert-success mt-3";
+                    
+                    // Redirect to students page after 2 seconds
+                    setTimeout(function() {
+                        window.location.href = '/students';
+                    }, 2000);
+                } else {
+                    statusDiv.textContent = "Error: " + data.message;
+                    statusDiv.className = "alert alert-danger mt-3";
+                    
+                    // Reset to capture mode
+                    retakeBtn.click();
+                }
+                statusDiv.style.display = "block";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                statusDiv.textContent = "Error saving face data. Please try again.";
+                statusDiv.className = "alert alert-danger mt-3";
+                statusDiv.style.display = "block";
+            });
+        });
+        
+        // Clean up when leaving the page
+        window.addEventListener('beforeunload', function() {
+            if (stream) {
+                stream.getTracks().forEach(track => {
+                    track.stop();
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

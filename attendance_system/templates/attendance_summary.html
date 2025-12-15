@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h2>Attendance Summary: {{ course.course_name }} ({{ course.course_code }})</h2>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <form class="d-flex" method="get">
+                    <input type="date" class="form-control me-2" id="date" name="date" value="{{ date }}">
+                    <button type="submit" class="btn btn-primary">View</button>
+                </form>
+            </div>
+            <div class="col-md-8 text-end">
+                <a href="/take_attendance/{{ course.id }}" class="btn btn-success">Take Attendance</a>
+                <button id="exportBtn" class="btn btn-secondary">Export CSV</button>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-striped" id="summaryTable">
+                <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in attendance_data %}
+                    <tr>
+                        <td>{{ record.roll_number }}</td>
+                        <td>{{ record.first_name }} {{ record.last_name }}</td>
+                        <td>
+                            {% if record.status == 'present' %}
+                            <span class="badge bg-success">Present</span>
+                            {% elif record.status %}
+                            <span class="badge bg-warning">{{ record.status }}</span>
+                            {% else %}
+                            <span class="badge bg-danger">Absent</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">No attendance records found for this date.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h4>Summary Statistics</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="stats-card bg-success text-white p-3 rounded">
+                            <h5>Present</h5>
+                            <h3 id="presentCount">{{ attendance_data|selectattr('status', 'equalto', 'present')|list|length }}</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card bg-danger text-white p-3 rounded">
+                            <h5>Absent</h5>
+                            <h3 id="absentCount">{{ attendance_data|selectattr('status', 'none')|list|length }}</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card bg-info text-white p-3 rounded">
+                            <h5>Attendance Rate</h5>
+                            <h3 id="attendanceRate">
+                                {% set present_count = attendance_data|selectattr('status', 'equalto', 'present')|list|length %}
+                                {% set total_count = attendance_data|length %}
+                                {% if total_count > 0 %}
+                                    {{ (present_count / total_count * 100)|round(1) }}%
+                                {% else %}
+                                    0%
+                                {% endif %}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Export to CSV function
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const table = document.getElementById('summaryTable');
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = [], cols = rows[i].querySelectorAll('td, th');
+                
+                for (let j = 0; j < cols.length; j++) {
+                    // Get text content and remove badge formatting
+                    let content = cols[j].textContent.trim();
+                    // Add quotes to handle commas in content
+                    row.push('"' + content + '"');
+                }
+                
+                csv.push(row.join(','));
+            }
+            
+            // Create and download the CSV file
+            const csvString = csv.join('\n');
+            const filename = 'attendance_{{ course.course_code }}_{{ date }}.csv';
+            
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            
+            if (navigator.msSaveBlob) { // For IE
+                navigator.msSaveBlob(blob, filename);
+            } else {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+    });
+</script>
+{% endblock %}
