@@ -172,6 +172,7 @@ pip install opencv-contrib-python
 4. **Take Attendance**: Select course → Students face camera → Auto-recognition
 5. **View Reports**: Click "View Summary" to see attendance records
 
+---
 ### Detailed Workflow 
 #### 1. Home Page
 ![Home](images/main page.png)
@@ -243,8 +244,6 @@ Student-Attendence-System/
     ├── take_attendance.html
     └── attendance_summary.html
 ```
-
----
 
 
 ---
