@@ -175,17 +175,17 @@ pip install opencv-contrib-python
 ### Detailed Workflow
 
 #### 1. Course Management
-![Courses](https://github.com/pinkidagar18/Student-Attendence-System-/tree/main/images/courses.png)
+![Courses](images/courses.png)
 
 Create courses with unique codes (e.g., CS101, MATH201). Best practice: Use department code + number format.
 
 #### 2. Student Registration
-![Students](https://github.com/pinkidagar18/Student-Attendence-System-/tree/main/images/students.png)
+![Students](images/students.png)
 
 Add students with roll numbers. Use consistent format like year + sequential number (2023001, 2023002).
 
 #### 3. Face Registration
-![Register Face](https://github.com/pinkidagar18/Student-Attendence-System-/tree/main/images/register_face.png)
+![Register Face](images/register_face.png)
 
 **Best Practices:**
 - Center face in frame (60-80% coverage)
@@ -195,12 +195,12 @@ Add students with roll numbers. Use consistent format like year + sequential num
 - Only ONE face visible
 
 #### 4. Taking Attendance
-![Take Attendance](https://github.com/pinkidagar18/Student-Attendence-System-/tree/main/images/take_attendance.png)
+![Take Attendance](images/take_attendance.png)
 
 Students queue and face camera one by one. System recognizes and marks automatically. Confirm each recognition before moving to next student.
 
 #### 5. Attendance Reports
-![Summary](https://github.com/pinkidagar18/Student-Attendence-System-/tree/main/images/attendance_summary.png)
+![Summary](images/attendance_summary.png)
 
 View color-coded reports (Green=Present, Red=Absent) with date filtering and attendance percentages.
 
