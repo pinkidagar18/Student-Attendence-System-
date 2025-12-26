@@ -190,7 +190,7 @@ Create courses with unique codes (e.g., CS101, MATH201). Best practice: Use depa
 Add students with roll numbers. Use consistent format like year + sequential number (2023001, 2023002).
 
 #### 3. Face Registration
-![Register Face](images/attendence page.png)
+![Register Face](images/attendence_page.png)
 
 **Best Practices:**
 - Center face in frame (60-80% coverage)
@@ -200,7 +200,7 @@ Add students with roll numbers. Use consistent format like year + sequential num
 - Only ONE face visible
 
 #### 4. Taking Attendance
-![Take Attendance](images/take attendance_page.png)
+![Take Attendance](images/take attendancepage.png)
 
 Students queue and face camera one by one. System recognizes and marks automatically. Confirm each recognition before moving to next student.
 
