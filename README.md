@@ -200,7 +200,7 @@ Add students with roll numbers. Use consistent format like year + sequential num
 - Only ONE face visible
 
 #### 5. Attendance Summary
-![Take Attendance](images/attendance_page.png)
+![Attendance Summary](images/attendence_page.png)
 
 Students queue and face camera one by one. System recognizes and marks automatically. Confirm each recognition before moving to next student.
 
