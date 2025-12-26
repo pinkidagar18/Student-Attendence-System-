@@ -175,22 +175,22 @@ pip install opencv-contrib-python
 ---
 ### Detailed Workflow 
 #### 1. Home Page
-![Home](images/main page.png)
+![Home](images/main_page.png)
 
 View color-coded reports (Green=Present, Red=Absent) with date filtering and attendance percentages.
 
-#### 1. Course Management
-![Courses](images/course page.png)
+#### 2. Course Management
+![Courses](images/course_page.png)
 
 Create courses with unique codes (e.g., CS101, MATH201). Best practice: Use department code + number format.
 
-#### 2. Student Registration
-![Students](images/student page.png)
+#### 3. Student Registration
+![Students](images/student_page.png)
 
 Add students with roll numbers. Use consistent format like year + sequential number (2023001, 2023002).
 
-#### 3. Face Registration
-![Register Face](images/attendence_page.png)
+#### 4. Face Registration
+![Register Face](images/take_attendence_page.png)
 
 **Best Practices:**
 - Center face in frame (60-80% coverage)
@@ -199,8 +199,8 @@ Add students with roll numbers. Use consistent format like year + sequential num
 - Neutral expression
 - Only ONE face visible
 
-#### 4. Taking Attendance
-![Take Attendance](images/take attendancepage.png)
+#### 5. Attendance Summary
+![Take Attendance](images/attendance_page.png)
 
 Students queue and face camera one by one. System recognizes and marks automatically. Confirm each recognition before moving to next student.
 
