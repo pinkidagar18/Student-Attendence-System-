@@ -420,14 +420,6 @@ This project is licensed under the **MIT License**.
 
 ---
 
-## 📚 References
-
-1. **Viola, P., & Jones, M.** (2001). "Rapid Object Detection using a Boosted Cascade of Simple Features"
-2. **Ahonen, T., Hadid, A., & Pietikäinen, M.** (2006). "Face Description with Local Binary Patterns"
-3. **Flask Documentation**: [flask.palletsprojects.com](https://flask.palletsprojects.com/)
-4. **OpenCV Documentation**: [docs.opencv.org](https://docs.opencv.org/)
-5. **GDPR Guidelines**: [gdpr-info.eu](https://gdpr-info.eu/)
-
 ---
 
 ## ⚠️ Important Notes
